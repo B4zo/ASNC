@@ -30,37 +30,43 @@
     font = "lat2-16";
   };
 
+  virtualisation.virtualbox.guest.enable = true;
+
   users.users.admin = {
     isNormalUser = true;
     extraGroups = [ "networkmanager" "wheel" "vboxsf" "vboxguest" ];
     initialPassword = "1234";
     packages = with pkgs; [
-      tree 
-      vim
+      tree
     ];
   };
 
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    vim
     firebird_3
     php83
-    virtualboxGuestAdditions
+    git
   ];
 
   services = {
-    virtualboxGuest.enable = true;
-
     httpd = {
       enable = true;
       enablePHP = true;
       user = "wwwrun";
       group = "wwwrun";
-      virtualHosts."localhost" = {
-        documentRoot = "/var/www/localhost";
+      virtualHosts."localhost" = { 
+         documentRoot = "/var/www/localhost";
+         extraConfig = ''
+           <Directory "/var/www/localhost">
+             Options Indexes FollowSymLinks
+             AllowOverride All
+             Require all granted
+           </Directory>
+         '';
       };
     };
-
     mysql = {
       enable = true;
       package = pkgs.mariadb;
