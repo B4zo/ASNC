@@ -18,7 +18,7 @@
   networking = {
     hostName = "nixos";
     networkmanager.enable = true;
-    firewall.allowedTCPPorts = [ 80 443 ];
+    firewall.allowedTCPPorts = [ 80 443 21 22 ];
   };
 
   time.timeZone = "Europe/Ljubljana";
@@ -36,6 +36,7 @@
     isNormalUser = true;
     extraGroups = [ "networkmanager" "wheel" "vboxsf" "vboxguest" ];
     initialPassword = "1234";
+    openssh.authorizedKeys.keys = [ "ssh-25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9aoRyQAW1uCSMEsjkAkx6yLVAwZ+MY4qXtGojUarbi admin@nixos" ];
     packages = with pkgs; [
       tree
     ];
