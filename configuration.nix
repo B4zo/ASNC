@@ -32,14 +32,20 @@
 
   virtualisation.virtualbox.guest.enable = true;
 
-  users.users.admin = {
-    isNormalUser = true;
-    extraGroups = [ "networkmanager" "wheel" "vboxsf" "vboxguest" ];
-    initialPassword = "1234";
-    openssh.authorizedKeys.keys = [ "ssh-25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9aoRyQAW1uCSMEsjkAkx6yLVAwZ+MY4qXtGojUarbi admin@nixos" ];
-    packages = with pkgs; [
-      tree
-    ];
+  users.users = { 
+    admin = {
+      isNormalUser = true;
+      extraGroups = [ "networkmanager" "wheel" "vboxsf" "vboxguest" ];
+      initialPassword = "1234";
+      openssh.authorizedKeys.keys = [ "ssh-25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9aoRyQAW1uCSMEsjkAkx6yLVAwZ+MY4qXtGojUarbi admin@nixos" ];
+      packages = with pkgs; [
+          inetutils
+      ];
+    };
+    ftpuser = {
+      isNormalUser = true;
+      initialPassword = "1234";     
+    };
   };
 
   nixpkgs.config.allowUnfree = true;
