@@ -18,7 +18,7 @@
   networking = {
     hostName = "nixos";
     networkmanager.enable = true;
-    firewall.allowedTCPPorts = [ 80 443 21 22 ];
+    firewall.allowedTCPPorts = [ 80 443 21 22 40000 40001 40002 40003 40004 40005 40006 40007 40008 40009 40010 ];
   };
 
   time.timeZone = "Europe/Ljubljana";
@@ -85,6 +85,13 @@
       localUsers = true;
       writeEnable = true;
       localRoot = "/var/ftp";
+      extraConfig = ''
+        pasv_enable=YES
+        pasv_min_port=40000
+        pasv_max_port=40010
+        pasv_address=10.0.2.2
+        listen_port=21
+      '';
     };
 
     postfix = {
