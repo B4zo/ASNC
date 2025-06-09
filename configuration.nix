@@ -84,13 +84,10 @@
       enable = true;
       localUsers = true;
       writeEnable = true;
-      localRoot = "/var/ftp";
       extraConfig = ''
         pasv_enable=YES
         pasv_min_port=40000
         pasv_max_port=40010
-        pasv_address=10.0.2.2
-        listen_port=21
       '';
     };
 
