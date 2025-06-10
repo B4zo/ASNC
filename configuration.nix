@@ -18,7 +18,7 @@
   networking = {
     hostName = "nixos";
     networkmanager.enable = true;
-    firewall.allowedTCPPorts = [ 80 443 21 22 40000 40001 40002 40003 40004 40005 40006 40007 40008 40009 40010 ];
+    firewall.allowedTCPPorts = [ 80 443 21 22 40000 40001 40002 40003 40004 40005 40006 40007 40008 40009 40010 587 ];
   };
 
   time.timeZone = "Europe/Ljubljana";
@@ -55,6 +55,8 @@
     firebird_3
     php83
     git
+    mailutils
+    systemd
   ];
 
   services = {
@@ -85,15 +87,32 @@
       localUsers = true;
       writeEnable = true;
       extraConfig = ''
+        no_anon_password=YES
+        user_sub_token=$USER
+        local_root=/home/%u
+        allow_writeable_chroot=YES
         pasv_enable=YES
         pasv_min_port=40000
         pasv_max_port=40010
+        port_enable=YES
+        pasv_address=127.0.0.1
+        listen_address=0.0.0.0
       '';
     };
 
     postfix = {
       enable = true;
-      rootAlias = "admin";
+      rootAlias = "aljaz.skafar1@gmail.com";
+      relayHost = "smtp.gmail.com";
+      relayPort = 587;
+      config = {
+        smtp_use_tls = "yes";
+        smtp_sasl_auth_enable ="yes";
+        smtp_sasl_security_options = "noanonymus";
+        smtp_sasl_password_maps = "hash:/etc/postfix/sasl_passwd";
+        smtp_sasl_tls_security_options = "noanonymous";
+        inet_protocols = "ipv4";
+      };
     };
 
     openssh.enable = true;
